@@ -1,14 +1,12 @@
-!!! 5
+doctype 5
 html
     head
         block head
             // link(rel='stylesheet', href='/stylesheets/styles.css')
             title= adminion.env.serverName
-            script(src='/scripts/jquery.js')
-            script.
-                $(document).ready(function() {
-                    $('#name').focus();
-                });
+            block jquery
+                script(src='/scripts/jquery.js')
+                
             block socketio
             block accounts
     body
@@ -18,13 +16,17 @@ html
                     block header
                         block banner
                             #banner
+                                h1 Administrate your deck
                                 // this would be a good place for a banner image
                         block breadcrumbs
                             #breadcrumbs
                                 // breadcrumbs leave a trail as players navigate the server
                                 h3
+                                    - // remove everything after and including the '?'
                                     - var breadcrumbs = request.url.replace(/\?.*$/, '')
+                                    - // split the string by '/' into an array
                                     - breadcrumbs = breadcrumbs.split('/')
+                                    - // for each item in the array
                                     - each crumb, id in breadcrumbs
                                         if (!id)
                                             a(href='/') #{adminion.env.serverName}
@@ -47,10 +49,10 @@ html
                                 else
                                     span Not logged on. 
                                         [&nbsp; 
-                                        a(href='/logon?redir=' + request.url) Logon
+                                        a(href='/logon?redir=' + request.url) Logon 
+                                        &nbsp;|&nbsp;
+                                        a(href='/accounts/create') Sign-up
                                         &nbsp;]
-                #body
-                    block body
                         block menu
                             #menu
                                 if (config.links && request.session.passport.user)
@@ -59,9 +61,9 @@ html
                                     ul#links
                                         each url, title in config.links
                                             li: a(href=url) #{title}
-                        block main
-                            #main
-                                block content
-                                    #content
+                #body
+                    block body
+                        block content
+                            #content
                                     
                                     

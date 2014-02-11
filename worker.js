@@ -1,13 +1,37 @@
 
+var cluster = require('cluster');
+
+if (cluster.isMaster) {
+    console.log('Starting Adminion game server...');
+}
+
+var util = require('util'),
+    AdminionServer = require('./lib/'),
+    utils = require('./lib/utils');
+
 global.debug = require('./lib/debug')();
 
-// load main library and controllers
-var adminionServer = require('./lib/');
+debug.emit('val', 'AdminionServer', AdminionServer);
 
-// create a server instance
-var Adminion = adminionServer();
+AdminionServer.on('error', AdminionServer.kill);
 
-debug.emit('val', 'Adminion', Adminion, 'worker.js', 10);
+AdminionServer.on('ready', function ready () {
 
-// now sit back and wait for requests
-Adminion.start();
+    if (cluster.isMaster) {
+
+        console.log('Adminion Game Server ready --> ', AdminionServer.env.url());
+
+        debug.emit('val', 'mem.heapTotal', mem.heapTotal);
+
+    } else if (cluster.isWorker) {
+
+        debug.emit('msg', 'worker ' + cluster.worker.id + ' ready!');
+    
+        var mem = process.memoryUsage();
+        process.send({'ready': true, 'memoryUsage': mem.heapTotal});
+    }
+
+    return true;
+});
+
+AdminionServer.start();
