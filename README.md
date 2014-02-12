@@ -3,39 +3,65 @@ Adminion
 
 Administrate your deck
 
-Adminion is under heavy development.  Its likely going to crash on you... issues/pull requests...?
+Adminion is under heavy development... pull frequently...?  
+Its likely going to crash on you... issues/pull requests...?
 
 ## System Dependencies
 Adminion depends on [node](http://nodejs.org) and [mongodb](http://www.mongodb.org).  
 
 ### Ubuntu
 
-	# apt-get update && apt-get install node mongodb
+	# apt-get update && apt-get install nodejs npm mongodb
 
 ### Mac OS X
 
 	# brew update && brew install node mongodb
 
 ### Windows 
-Although I have not really tried to make it run on windows, theoretically, it should work fine.
+Although I have not really tried to make it run on windows, theoretically, it should work fine if you can get node, npm, and mongodb
 
 ## Get Adminion
 The easiest way to get (and later update) adminion is using git:
 
 	$ cd /where/you/want/it/
-	$ git clone git://github.com/adminion/adminion.git
+	$ git clone git@github.com:adminion/adminion.git
 
-### Install required Node Modules
-Now use npm to install all module dependencies and create the default admin user:
+## Install Adminion
+Now use setup/setup.sh to install all module dependencies and create the default admin user:
 
-	$ cd adminion/ && sudo npm install
+	$ cd adminion/ && sudo ./setup/setup.sh
 	
 ## Start the game server
 
 	# ./adminion.sh
 
 ## Server configuration
-All server configuration options are defined within `config.json`.  If an option is omitted, the default value will be used.
+Configuration defaults are defined in config.default.json:
+
+```json
+{
+    "debug": false,
+    "cacheUpdateInterval": 300000, 
+    "host": "localhost", 
+    "https": true,
+    "locals": {
+        "links" : {
+            "Games" : "/games"
+            , "Accounts" : "/accounts"
+        }
+    },
+    "port": "1337",
+    "mongodb": "mongodb://localhost/adminion",
+    "serverName": "Adminion",
+    "session": {
+        "cookie": { "maxAge" : 18000000 }, 
+        "secret": "$4$1M1KLxrb$h0ynxcy1IZ0wQltG+iqdYZCmcfg$"
+    },
+    "views": "views",
+    "viewEngine": "jade",
+    "workers": 1
+}
+```
 
 ### Configuration options
 
